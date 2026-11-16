@@ -1,6 +1,552 @@
-body {
-  background-color: lightblue;
+/* =========================================================
+   POKÉMON FAN WEBSITE - SHARED MASTER STYLESHEET
+   Created by: Badiuzzaman | Roll No: 26i3171
+   ========================================================= */
+
+/* Import modern, tech-inspired fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@300;400;600;700&display=swap');
+
+/* 1. CSS VARIABLES (Easy Theme Color Controls) */
+:root {
+  --bg-dark: #090d16;
+  --bg-secondary: #111827;
+  --card-bg: rgba(20, 29, 47, 0.78);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --poke-red: #ff2a4b;
+  --poke-red-glow: rgba(255, 42, 75, 0.45);
+  --poke-yellow: #facc15;
+  --poke-yellow-glow: rgba(250, 204, 21, 0.45);
+  --aura-blue: #38bdf8;
+  --aura-blue-glow: rgba(56, 189, 248, 0.4);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
 }
-h1{
-    color: red;
+
+/* 2. GLOBAL RESET & BASE STYLES */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated Stadium Glow Background */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(130px);
+  z-index: -1;
+  pointer-events: none;
+  animation: pulseAura 8s ease-in-out infinite alternate;
+}
+
+body::before {
+  top: -100px;
+  left: -100px;
+  background: var(--poke-red-glow);
+}
+
+body::after {
+  bottom: -120px;
+  right: -100px;
+  background: var(--aura-blue-glow);
+  animation-delay: 4s;
+}
+
+@keyframes pulseAura {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0.85;
+  }
+}
+
+/* 3. NAVIGATION BAR (Shared Across All 3 Pages) */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--card-border);
+  padding: 14px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+/* Pure CSS Spinning Poké Ball Logo */
+.pokeball-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, var(--poke-red) 46%, #111 46%, #111 54%, #ffffff 54%);
+  border: 2px solid #ffffff;
+  position: relative;
+  box-shadow: 0 0 14px var(--poke-red-glow);
+  transition: transform 0.6s ease;
+}
+
+.pokeball-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border: 2px solid #111;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.brand:hover .pokeball-icon {
+  transform: rotate(360deg);
+}
+
+.brand-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #ffffff, var(--poke-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 14px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+  border-color: var(--aura-blue);
+  box-shadow: 0 0 12px var(--aura-blue-glow);
+}
+
+.nav-links a.active {
+  color: #090d16;
+  background: linear-gradient(135deg, var(--poke-yellow), #f59e0b);
+  box-shadow: 0 0 18px var(--poke-yellow-glow);
+}
+
+/* Mobile Menu Button */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  font-size: 1.4rem;
+  padding: 4px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 4. MAIN CONTAINER & SECTION HEADINGS */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 20px 70px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--aura-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+/* 5. HERO SECTION (Homepage) */
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 36px;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  margin-bottom: 50px;
+  animation: fadeSlideUp 0.8s ease forwards;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 42, 75, 0.15);
+  border: 1px solid var(--poke-red);
+  color: #ff8598;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.7rem;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #ffffff 20%, var(--poke-yellow) 60%, var(--poke-red) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin-bottom: 24px;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--poke-red), #d91b38);
+  color: #ffffff;
+  box-shadow: 0 8px 22px var(--poke-red-glow);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 12px 28px rgba(255, 42, 75, 0.7);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  border: 1px solid var(--aura-blue);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 22px var(--aura-blue-glow);
+}
+
+/* Glowing Championship Image Frame */
+.hero-image-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 8px;
+  background: linear-gradient(135deg, var(--poke-red), var(--poke-yellow), var(--aura-blue));
+  box-shadow: 0 0 35px rgba(250, 204, 21, 0.28);
+  animation: floatCard 5s ease-in-out infinite;
+}
+
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hero-image-card img {
+  width: 100%;
+  display: block;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.image-caption {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #090d16;
+  padding: 8px 10px 4px;
+}
+
+/* 6. INTERACTIVE CHAMPIONSHIP VAULT (Upgraded JS Feature) */
+.vault-box {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 22px;
+  padding: 34px;
+  margin-bottom: 50px;
+  text-align: center;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+}
+
+.vault-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.trophy-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.trophy-btn:hover,
+.trophy-btn.active-trophy {
+  background: linear-gradient(135deg, var(--poke-yellow), #eab308);
+  color: #090d16;
+  box-shadow: 0 0 20px var(--poke-yellow-glow);
+  transform: translateY(-2px);
+}
+
+.trophy-display {
+  max-width: 680px;
+  margin: 0 auto;
+  background: rgba(9, 13, 22, 0.75);
+  border: 1px solid var(--poke-yellow);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: inset 0 0 20px rgba(250, 204, 21, 0.12);
+  transition: all 0.3s ease;
+}
+
+.trophy-display h3 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--poke-yellow);
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.trophy-display p {
+  color: var(--text-main);
+  font-size: 0.98rem;
+}
+
+/* 7. LEAGUE JOURNEY TABLE (Upgraded Lab 11 Table) */
+.table-wrapper {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 22px;
+  padding: 28px;
+  overflow-x: auto;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+}
+
+.league-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.league-table th {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--poke-yellow);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 16px 18px;
+  border-bottom: 2px solid var(--poke-red);
+}
+
+.league-table td {
+  padding: 15px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--text-main);
+}
+
+.league-table tbody tr {
+  transition: background 0.25s ease;
+}
+
+.league-table tbody tr:hover {
+  background: rgba(56, 189, 248, 0.08);
+}
+
+/* Rank Badges inside Table */
+.rank-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.rank-standard {
+  background: rgba(148, 163, 184, 0.16);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.rank-runnerup {
+  background: rgba(56, 189, 248, 0.16);
+  color: var(--aura-blue);
+  border: 1px solid var(--aura-blue);
+}
+
+.rank-champion {
+  background: rgba(250, 204, 21, 0.18);
+  color: var(--poke-yellow);
+  border: 1px solid var(--poke-yellow);
+  box-shadow: 0 0 12px rgba(250, 204, 21, 0.3);
+}
+
+.rank-monarch {
+  background: linear-gradient(135deg, var(--poke-red), #f59e0b);
+  color: #ffffff;
+  box-shadow: 0 0 15px var(--poke-red-glow);
+}
+
+/* 8. SHARED FOOTER */
+.footer {
+  background: rgba(9, 13, 22, 0.92);
+  border-top: 1px solid var(--card-border);
+  text-align: center;
+  padding: 26px 20px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.footer span {
+  color: var(--poke-yellow);
+  font-weight: 600;
+}
+
+/* 9. RESPONSIVE DESIGN (Tablets & Mobile Phones) */
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 28px 22px;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    right: 5%;
+    width: 220px;
+    background: #111827;
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.6);
+  }
+
+  .nav-links.show-menu {
+    display: flex;
+  }
+
+  .section-title {
+    font-size: 1.55rem;
+  }
 }

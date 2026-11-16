@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Fan Hub | Trivia & Fan Zone</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Page-Specific Styles for Trivia Quiz & Trainer Card Generator */
+    .two-col-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .panel-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.45rem;
+      color: var(--poke-yellow);
+      margin-bottom: 8px;
+    }
+
+    /* Quiz Progress Bar */
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      color: var(--aura-blue);
+      font-weight: 600;
+      margin: 16px 0 8px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, var(--aura-blue), var(--poke-yellow));
+      transition: width 0.35s ease;
+    }
+
+    .question-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 18px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .option-btn {
+      text-align: left;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--aura-blue);
+      background: rgba(56, 189, 248, 0.12);
+      transform: translateX(4px);
+    }
+
+    .option-btn.correct {
+      background: rgba(34, 197, 94, 0.22);
+      border-color: #22c55e;
+      color: #86efac;
+      font-weight: 600;
+    }
+
+    .option-btn.wrong {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+
+    .feedback-box {
+      display: none;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(9, 13, 22, 0.75);
+      border: 1px solid var(--aura-blue);
+      color: var(--text-main);
+      font-size: 0.92rem;
+      margin-bottom: 16px;
+    }
+
+    /* Final Quiz Score Screen */
+    .result-box {
+      display: none;
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .rank-crown {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .result-box h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      color: var(--poke-yellow);
+      margin-bottom: 8px;
+    }
+
+    /* Fan Club Trainer Form */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: rgba(9, 13, 22, 0.85);
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--poke-yellow);
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.25);
+    }
+
+    /* Generated Digital Trainer Card */
+    .trainer-card-preview {
+      display: none;
+      margin-top: 22px;
+      padding: 20px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 2px solid var(--poke-yellow);
+      box-shadow: 0 0 25px rgba(250, 204, 21, 0.3);
+      animation: fadeSlideUp 0.5s ease forwards;
+    }
+
+    .tc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tc-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: var(--poke-yellow);
+    }
+
+    .tc-id {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.82rem;
+      color: var(--aura-blue);
+    }
+
+    .tc-body p {
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 860px) {
+      .two-col-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Badiuzzaman 26i3171 -->
+
+  <!-- SHARED NAVIGATION BAR -->
+  <header class="navbar">
+    <a href="index.html" class="brand">
+      <div class="pokeball-icon"></div>
+      <span class="brand-text">POKÉ-ARENA</span>
+    </a>
+
+    <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle Menu">☰</button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Ash's Journey</a></li>
+      <li><a href="team.html">Iconic Team</a></li>
+      <li><a href="quiz.html" class="active">Trivia & Fan Zone</a></li>
+    </ul>
+  </header>
+
+  <main class="container">
+    <div class="section-header">
+      <span class="section-tag">Test Your Trainer Knowledge</span>
+      <h1 class="section-title">Pokémon Trivia & Fan Zone</h1>
+    </div>
+
+    <div class="two-col-layout">
+
+      <!-- LEFT PANEL: 5-QUESTION POKÉMON TRIVIA QUIZ -->
+      <section class="panel-card">
+        <h2 class="panel-title">⚡ Champion Trivia Challenge</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem;">
+          Answer all 5 questions about Ash's adventures to earn your official Trainer Rank!
+        </p>
+
+        <div id="quizArea">
+          <div class="quiz-meta">
+            <span id="questionCounter">Question 1 of 5</span>
+            <span id="scoreCounter">Score: 0</span>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+
+          <div class="question-text" id="questionText">Loading question...</div>
+          <div class="options-list" id="optionsList"></div>
+
+          <div class="feedback-box" id="feedbackBox"></div>
+
+          <button class="btn btn-primary" id="nextBtn" style="display: none; width: 100%;" onclick="nextQuestion()">
+            Next Question ➔
+          </button>
+        </div>
+
+        <!-- FINAL SCORE & RANK SCREEN -->
+        <div class="result-box" id="resultBox">
+          <div class="rank-crown" id="rankIcon">🏆</div>
+          <h3 id="rankTitle">World Monarch</h3>
+          <p id="finalScoreText" style="font-size: 1.05rem; margin-bottom: 12px;"></p>
+          <p id="rankSummary" style="color: var(--text-muted); margin-bottom: 22px;"></p>
+          <button class="btn btn-secondary" onclick="restartQuiz()">🔄 Play Quiz Again</button>
+        </div>
+      </section>
+
+      <!-- RIGHT PANEL: FAN CLUB TRAINER ID CARD GENERATOR -->
+      <section class="panel-card">
+        <h2 class="panel-title">🪪 Trainer ID Generator</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 18px;">
+          Join the Poké-Arena Fan Club and generate your custom digital Trainer Card!
+        </p>
+
+        <form id="trainerForm" onsubmit="generateTrainerCard(event)">
+          <div class="form-group">
+            <label for="trainerName">Trainer Name</label>
+            <input type="text" id="trainerName" class="form-control" placeholder="e.g., Badiuzzaman" required>
+          </div>
+
+          <div class="form-group">
+            <label for="trainerRegion">Home Region</label>
+            <select id="trainerRegion" class="form-control">
+              <option value="Kanto">Kanto (Pallet Town)</option>
+              <option value="Johto">Johto (New Bark Town)</option>
+              <option value="Hoenn">Hoenn (Littleroot Town)</option>
+              <option value="Sinnoh">Sinnoh (Twinleaf Town)</option>
+              <option value="Kalos">Kalos (Vaniville Town)</option>
+              <option value="Alola">Alola (Melemele Island)</option>
+              <option value="Galar">Galar (Postwick)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="partnerPokemon">Ace Partner Pokémon</label>
+            <input type="text" id="partnerPokemon" class="form-control" placeholder="e.g., Pikachu, Lucario, Charizard" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            ✨ Generate My Trainer Card
+          </button>
+        </form>
+
+        <!-- GENERATED TRAINER CARD -->
+        <div class="trainer-card-preview" id="trainerCard">
+          <div class="tc-header">
+            <span class="tc-title">POKÉMON LEAGUE PASS</span>
+            <span class="tc-id" id="cardIdNumber">#PKM-2631</span>
+          </div>
+          <div class="tc-body">
+            <p><strong>Trainer:</strong> <span id="cardName"></span></p>
+            <p><strong>Home Region:</strong> <span id="cardRegion"></span></p>
+            <p><strong>Ace Partner:</strong> <span id="cardPartner"></span></p>
+            <p style="color: #86efac; font-size: 0.84rem; margin-top: 10px;">
+              ✔ Verified Poké-Arena Fan Club Member
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- SHARED FOOTER -->
+  <footer class="footer">
+    <p>Pokémon Fan Website &bull; Designed & Coded by <span>Badiuzzaman (26i3171)</span></p>
+  </footer>
+
+  <!-- BEGINNER-FRIENDLY JAVASCRIPT -->
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById("navLinks").classList.toggle("show-menu");
+    }
+
+    // 1. TRIVIA QUIZ DATA (5 Questions)
+    const quizQuestions = [
+      {
+        q: "1. Which tournament gave Ash Ketchum his very first official League Trophy?",
+        options: ["Kanto Indigo League", "Orange League", "Johto Silver Conference", "Hoenn League"],
+        answer: 1,
+        fact: "Correct! Ash won the Orange League Trophy by defeating Head Leader Drake."
+      },
+      {
+        q: "2. What is Ash's hometown in the Kanto region?",
+        options: ["Cerulean City", "Pewter City", "Pallet Town", "Viridian City"],
+        answer: 2,
+        fact: "Ash began his journey from Pallet Town at age 10 with Pikachu."
+      },
+      {
+        q: "3. Which Pokémon helped Ash defeat Cynthia's Garchomp in the Masters 8 Semifinals?",
+        options: ["Mega Lucario", "Sirfetch'd", "Dragonite", "Gengar"],
+        answer: 0,
+        fact: "Mega Lucario used its Aura bond with Ash to overcome Cynthia's ace Garchomp!"
+      },
+      {
+        q: "4. Which region crowned Ash as its very first League Champion?",
+        options: ["Kalos", "Sinnoh", "Alola", "Unova"],
+        answer: 2,
+        fact: "Ash won the inaugural Alola League at the Manalo Conference!"
+      },
+      {
+        q: "5. Who did Ash defeat in the World Coronation Series Finals to become World Monarch?",
+        options: ["Lance", "Steven Stone", "Cynthia", "Leon"],
+        answer: 3,
+        fact: "Pikachu defeated Leon's Charizard in an unforgettable final showdown at Wyndon Stadium!"
+      }
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const currentQ = quizQuestions[currentIndex];
+      document.getElementById("questionCounter").textContent = "Question " + (currentIndex + 1) + " of " + quizQuestions.length;
+      document.getElementById("scoreCounter").textContent = "Score: " + score;
+      document.getElementById("progressFill").style.width = ((currentIndex + 1) / quizQuestions.length) * 100 + "%";
+      document.getElementById("questionText").textContent = currentQ.q;
+
+      const optionsList = document.getElementById("optionsList");
+      optionsList.innerHTML = "";
+      document.getElementById("feedbackBox").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+
+      currentQ.options.forEach((optionText, index) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.textContent = optionText;
+        btn.onclick = () => checkAnswer(index, btn);
+        optionsList.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedIndex, clickedBtn) {
+      const currentQ = quizQuestions[currentIndex];
+      const allOptionBtns = document.querySelectorAll(".option-btn");
+
+      // Disable all buttons once answered
+      allOptionBtns.forEach(btn => btn.disabled = true);
+
+      const feedbackBox = document.getElementById("feedbackBox");
+      feedbackBox.style.display = "block";
+
+      if (selectedIndex === currentQ.answer) {
+        score++;
+        clickedBtn.classList.add("correct");
+        feedbackBox.textContent = "✅ " + currentQ.fact;
+      } else {
+        clickedBtn.classList.add("wrong");
+        allOptionBtns[currentQ.answer].classList.add("correct");
+        feedbackBox.textContent = "❌ Not quite! " + currentQ.fact;
+      }
+
+      document.getElementById("scoreCounter").textContent = "Score: " + score;
+      document.getElementById("nextBtn").style.display = "inline-block";
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < quizQuestions.length) {
+        loadQuestion();
+      } else {
+        showFinalResults();
+      }
+    }
+
+    function showFinalResults() {
+      document.getElementById("quizArea").style.display = "none";
+      const resultBox = document.getElementById("resultBox");
+      resultBox.style.display = "block";
+
+      document.getElementById("finalScoreText").textContent = "You scored " + score + " out of " + quizQuestions.length + "!";
+
+      if (score === 5) {
+        document.getElementById("rankIcon").textContent = "👑";
+        document.getElementById("rankTitle").textContent = "Rank: World Monarch";
+        document.getElementById("rankSummary").textContent = "Flawless victory! You know Ash's championship journey inside out.";
+      } else if (score >= 3) {
+        document.getElementById("rankIcon").textContent = "🏆";
+        document.getElementById("rankTitle").textContent = "Rank: League Champion";
+        document.getElementById("rankSummary").textContent = "Awesome job! You have the skills and knowledge of a regional Pokémon Champion.";
+      } else {
+        document.getElementById("rankIcon").textContent = "🎒";
+        document.getElementById("rankTitle").textContent = "Rank: Pallet Town Rookie";
+        document.getElementById("rankSummary").textContent = "Every Pokémon Master starts somewhere—check out Ash's Journey and try again!";
+      }
+    }
+
+    function restartQuiz() {
+      currentIndex = 0;
+      score = 0;
+      document.getElementById("resultBox").style.display = "none";
+      document.getElementById("quizArea").style.display = "block";
+      loadQuestion();
+    }
+
+    // Initialize Quiz on Page Load
+    loadQuestion();
+
+    // 2. TRAINER ID CARD GENERATOR
+    function generateTrainerCard(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("trainerName").value.trim();
+      const region = document.getElementById("trainerRegion").value;
+      const partner = document.getElementById("partnerPokemon").value.trim();
+      const randomId = Math.floor(1000 + Math.random() * 9000);
+
+      document.getElementById("cardName").textContent = name;
+      document.getElementById("cardRegion").textContent = region;
+      document.getElementById("cardPartner").textContent = partner;
+      document.getElementById("cardIdNumber").textContent = "#PKM-" + randomId;
+
+      document.getElementById("trainerCard").style.display = "block";
+    }
+  </script>
+</body>
+</html>

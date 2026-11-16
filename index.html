@@ -1,47 +1,197 @@
- <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Pokemon_fanpage</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Fan Hub | Ash Ketchum's Journey</title>
+  <!-- Fixed link to shared stylesheet -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<link rel="stylesheet" href="styles.css">
-<!-- Badiuzzaman 26i3171 -->
-<h1>Pokemon</h1>
-<p>Ash Ketchum is a 10-year-old boy from Pallet Town whose dream is to become the greatest Pokémon Master.</p>
+  <!-- Badiuzzaman 26i3171 -->
 
+  <!-- SHARED NAVIGATION BAR -->
+  <header class="navbar">
+    <a href="index.html" class="brand">
+      <div class="pokeball-icon"></div>
+      <span class="brand-text">POKÉ-ARENA</span>
+    </a>
 
+    <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle Menu">☰</button>
 
-<img  src="4qZY7kB5gmNXYaYqCtWGMP.webp">
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Ash's Journey</a></li>
+      <li><a href="team.html">Iconic Team</a></li>
+      <li><a href="quiz.html">Trivia & Fan Zone</a></li>
+    </ul>
+  </header>
 
-<table>
-  <tr>
-    <th>Seasson</th>
-    <th>Result</th>
-    
-  </tr>
-  <tr>
-    <td>Kanto League</td>
-    <td>Jhoto League</td>
-    
-  </tr>
-  <tr>
-    <td>Roumd 16</td>
-    <td>Round 8</td>
-    
-  </tr>
-</table>
+  <main class="container">
 
-<button onclick="sayHello()">Click Here</button>
+    <!-- HERO SECTION: ASH KETCHUM & WORLD CHAMPIONSHIP IMAGE -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">⚡ PALLET TOWN TO WORLD MONARCH</div>
+        <h1>Ash Ketchum's Legendary Journey</h1>
+        <p>
+          Ash Ketchum is a determined trainer from Pallet Town who set out at age 10 with his partner Pikachu and a dream to become the greatest Pokémon Master. After 25 years of unforgettable battles across eight regions, he defeated Leon to claim the title of World Monarch!
+        </p>
+        <div class="hero-buttons">
+          <a href="team.html" class="btn btn-primary">Explore His Champion Team</a>
+          <a href="#league-history" class="btn btn-secondary">View League Records</a>
+        </div>
+      </div>
 
-<script>
-  function sayHello() {
-    console.log("Say Hello button was clicked");
-    window.alert("Ash won Orange league.");
-  }
-</script>
-<p>To Know when Ash won.</p>
+      <div class="hero-image-card">
+        <img src="4qZY7kB5gmNXYaYqCtWGMP.webp" alt="Ash Ketchum and his Pokémon team celebrating their World Coronation Series victory">
+        <div class="image-caption">🏆 World Coronation Series Champions — Wyndon Stadium</div>
+      </div>
+    </section>
 
+    <!-- INTERACTIVE CHAMPIONSHIP VAULT (Upgraded from your Lab 11 Button) -->
+    <section class="vault-box">
+      <div class="section-header">
+        <span class="section-tag">Interactive Poké-Console</span>
+        <h2 class="section-title">When Did Ash Win?</h2>
+      </div>
+      <p style="color: var(--text-muted);">
+        Click any major tournament below to unlock details about Ash's biggest championship victories!
+      </p>
 
+      <div class="vault-controls">
+        <button class="trophy-btn active-trophy" onclick="showVictory('orange', this)">🍊 Orange League</button>
+        <button class="trophy-btn" onclick="showVictory('frontier', this)">🏛️ Battle Frontier</button>
+        <button class="trophy-btn" onclick="showVictory('alola', this)">🌺 Alola League</button>
+        <button class="trophy-btn" onclick="showVictory('world', this)">👑 World Monarch</button>
+      </div>
+
+      <div class="trophy-display" id="trophyDisplay">
+        <h3 id="trophyTitle">🏆 Orange League Champion (1999)</h3>
+        <p id="trophyText">
+          Ash earned his very first official League Trophy in the Orange Archipelago by defeating Head Leader Drake and his Dragonite in a thrilling 6-on-6 Full Battle!
+        </p>
+      </div>
+    </section>
+
+    <!-- LEAGUE RESULTS TABLE (Corrected & Expanded from Lab 11) -->
+    <section id="league-history">
+      <div class="section-header">
+        <span class="section-tag">Complete Career Stats</span>
+        <h2 class="section-title">Pokémon League History</h2>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="league-table">
+          <thead>
+            <tr>
+              <th>Season / Region</th>
+              <th>Tournament</th>
+              <th>Ace Pokémon</th>
+              <th>Final Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kanto</strong></td>
+              <td>Indigo Plateau Conference</td>
+              <td>Charizard & Pikachu</td>
+              <td><span class="rank-badge rank-standard">Top 16 (Round 16)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Orange Islands</strong></td>
+              <td>Orange League</td>
+              <td>Pikachu & Charizard</td>
+              <td><span class="rank-badge rank-champion">CHAMPION</span></td>
+            </tr>
+            <tr>
+              <td><strong>Johto</strong></td>
+              <td>Silver Conference</td>
+              <td>Charizard & Heracross</td>
+              <td><span class="rank-badge rank-standard">Top 8 (Round 8)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Hoenn</strong></td>
+              <td>Ever Grande Conference</td>
+              <td>Sceptile & Swellow</td>
+              <td><span class="rank-badge rank-standard">Top 8</span></td>
+            </tr>
+            <tr>
+              <td><strong>Sinnoh</strong></td>
+              <td>Lily of the Valley Conference</td>
+              <td>Infernape</td>
+              <td><span class="rank-badge rank-standard">Top 4</span></td>
+            </tr>
+            <tr>
+              <td><strong>Kalos</strong></td>
+              <td>Lumiose Conference</td>
+              <td>Ash-Greninja</td>
+              <td><span class="rank-badge rank-runnerup">Runner-Up (2nd)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Alola</strong></td>
+              <td>Manalo Conference</td>
+              <td>Pikachu & Lycanroc</td>
+              <td><span class="rank-badge rank-champion">FIRST CHAMPION</span></td>
+            </tr>
+            <tr>
+              <td><strong>Galar / World</strong></td>
+              <td>World Coronation Series (Masters 8)</td>
+              <td>Pikachu & Mega Lucario</td>
+              <td><span class="rank-badge rank-monarch">👑 WORLD MONARCH</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SHARED FOOTER -->
+  <footer class="footer">
+    <p>Pokémon Fan Website &bull; Designed & Coded by <span>Badiuzzaman (26i3171)</span></p>
+  </footer>
+
+  <!-- BEGINNER-FRIENDLY JAVASCRIPT -->
+  <script>
+    // 1. Mobile Navigation Menu Toggle
+    function toggleMobileMenu() {
+      const navLinks = document.getElementById("navLinks");
+      navLinks.classList.toggle("show-menu");
+    }
+
+    // 2. Interactive Championship Vault (Upgraded from your Lab 11 sayHello function)
+    const victories = {
+      orange: {
+        title: "🏆 Orange League Champion (1999)",
+        text: "Ash earned his very first official League Trophy in the Orange Archipelago by defeating Head Leader Drake and his Dragonite in a thrilling 6-on-6 Full Battle!"
+      },
+      frontier: {
+        title: "🏛️ Kanto Battle Frontier Conqueror (2006)",
+        text: "Ash defeated all seven Frontier Brains—including Pyramid King Brandon's Regice—and was even offered a spot as a Frontier Brain himself!"
+      },
+      alola: {
+        title: "🌺 First-Ever Alola League Champion (2019)",
+        text: "Ash defeated Gladion in the Manalo Conference finals and then overcame Professor Kukui and Tapu Koko in an exhibition match."
+      },
+      world: {
+        title: "👑 World Coronation Series Monarch (2022)",
+        text: "At Wyndon Stadium, Ash's Pikachu defeated Undefeated Champion Leon's Charizard, crowning Ash as the strongest trainer in the world!"
+      }
+    };
+
+    function showVictory(key, clickedButton) {
+      console.log("Championship button clicked:", key);
+
+      // Update the title and description inside the glowing trophy box
+      document.getElementById("trophyTitle").textContent = victories[key].title;
+      document.getElementById("trophyText").textContent = victories[key].text;
+
+      // Highlight the active button
+      const allButtons = document.querySelectorAll(".trophy-btn");
+      allButtons.forEach(btn => btn.classList.remove("active-trophy"));
+      clickedButton.classList.add("active-trophy");
+    }
+  </script>
 
 </body>
 </html>

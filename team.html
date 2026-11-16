@@ -1,0 +1,434 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Fan Hub | Ash's Iconic Team</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Page-Specific Styles for Ash's Pokémon Team Cards */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 9px 20px;
+      border-radius: 999px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active-filter {
+      background: linear-gradient(135deg, var(--aura-blue), #0284c7);
+      color: #090d16;
+      border-color: var(--aura-blue);
+      box-shadow: 0 0 18px var(--aura-blue-glow);
+      transform: translateY(-2px);
+    }
+
+    /* Battle Announcement Banner */
+    .battle-banner {
+      background: linear-gradient(90deg, rgba(255, 42, 75, 0.18), rgba(250, 204, 21, 0.18));
+      border: 1px solid var(--poke-yellow);
+      border-radius: 14px;
+      padding: 14px 20px;
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 600;
+      color: var(--poke-yellow);
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.18);
+      transition: transform 0.25s ease;
+    }
+
+    /* Responsive 3-Column Card Grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 26px;
+    }
+
+    .poke-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .poke-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--poke-yellow);
+      box-shadow: 0 16px 38px rgba(250, 204, 21, 0.22);
+    }
+
+    .poke-number {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.12);
+    }
+
+    .poke-img-box {
+      height: 165px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.16) 0%, transparent 70%);
+      margin-bottom: 14px;
+    }
+
+    .poke-img-box img {
+      max-height: 150px;
+      max-width: 150px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.55));
+      transition: transform 0.35s ease;
+    }
+
+    .poke-card:hover .poke-img-box img {
+      transform: scale(1.1) rotate(-2deg);
+    }
+
+    .poke-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.35rem;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .type-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .type-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      color: #090d16;
+    }
+
+    .type-electric { background: #facc15; }
+    .type-fighting { background: #fb7185; }
+    .type-steel    { background: #cbd5e1; }
+    .type-ghost    { background: #a78bfa; }
+    .type-poison   { background: #e879f9; }
+    .type-dragon   { background: #38bdf8; }
+    .type-flying   { background: #93c5fd; }
+    .type-water    { background: #22d3ee; }
+
+    .poke-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    /* Stat Bars */
+    .stat-group {
+      margin-bottom: 16px;
+    }
+
+    .stat-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .stat-bar {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .stat-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--poke-red), var(--poke-yellow));
+    }
+
+    .move-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--poke-red);
+      background: rgba(255, 42, 75, 0.14);
+      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .move-btn:hover {
+      background: var(--poke-red);
+      box-shadow: 0 0 18px var(--poke-red-glow);
+    }
+  </style>
+</head>
+<body>
+  <!-- Badiuzzaman 26i3171 -->
+
+  <!-- SHARED NAVIGATION BAR -->
+  <header class="navbar">
+    <a href="index.html" class="brand">
+      <div class="pokeball-icon"></div>
+      <span class="brand-text">POKÉ-ARENA</span>
+    </a>
+
+    <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle Menu">☰</button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Ash's Journey</a></li>
+      <li><a href="team.html" class="active">Iconic Team</a></li>
+      <li><a href="quiz.html">Trivia & Fan Zone</a></li>
+    </ul>
+  </header>
+
+  <main class="container">
+    <div class="section-header">
+      <span class="section-tag">World Coronation Masters 8</span>
+      <h1 class="section-title">Ash's Champion Roster</h1>
+      <p style="color: var(--text-muted); max-width: 650px; margin: 10px auto 0;">
+        Filter Ash's legendary World Monarch squad by Pokémon Type or trigger their signature Z-Move, Mega Evolution, and Gigantamax attacks!
+      </p>
+    </div>
+
+    <!-- INTERACTIVE TYPE FILTER BUTTONS -->
+    <div class="filter-bar">
+      <button class="filter-btn active-filter" onclick="filterTeam('all', this)">All Pokémon (6)</button>
+      <button class="filter-btn" onclick="filterTeam('electric', this)">⚡ Electric</button>
+      <button class="filter-btn" onclick="filterTeam('fighting', this)">🥊 Fighting</button>
+      <button class="filter-btn" onclick="filterTeam('dragon', this)">🐉 Dragon</button>
+      <button class="filter-btn" onclick="filterTeam('ghost', this)">👻 Ghost</button>
+      <button class="filter-btn" onclick="filterTeam('water', this)">🌊 Water</button>
+    </div>
+
+    <!-- LIVE BATTLE ANNOUNCER -->
+    <div class="battle-banner" id="battleBanner">
+      ⚔️ Click "Use Signature Move" on any Pokémon card below to unleash its ultimate attack!
+    </div>
+
+    <!-- 6 POKÉMON CARDS -->
+    <section class="team-grid" id="teamGrid">
+
+      <!-- 1. PIKACHU -->
+      <article class="poke-card" data-types="electric">
+        <div>
+          <span class="poke-number">#025</span>
+          <div class="poke-img-box">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
+          </div>
+          <h2 class="poke-name">Pikachu</h2>
+          <div class="type-row">
+            <span class="type-pill type-electric">Electric</span>
+          </div>
+          <p class="poke-desc">
+            Ash's very first partner from Pallet Town. Defeated Leon's Charizard in the World Finals with unbreakable willpower.
+          </p>
+          <div class="stat-group">
+            <div class="stat-label"><span>Speed</span><span>98%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 98%;"></div></div>
+            <div class="stat-label"><span>Trainer Bond</span><span>100%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 100%;"></div></div>
+          </div>
+        </div>
+        <button class="move-btn" onclick="useMove('Pikachu', '10,000,000 Volt Thunderbolt ⚡')">⚡ Use Signature Move</button>
+      </article>
+
+      <!-- 2. LUCARIO -->
+      <article class="poke-card" data-types="fighting steel">
+        <div>
+          <span class="poke-number">#448</span>
+          <div class="poke-img-box">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png" alt="Lucario">
+          </div>
+          <h2 class="poke-name">Mega Lucario</h2>
+          <div class="type-row">
+            <span class="type-pill type-fighting">Fighting</span>
+            <span class="type-pill type-steel">Steel</span>
+          </div>
+          <p class="poke-desc">
+            Hatched from an egg in Vermilion City, Lucario shares Ash's Aura and defeated Cynthia's Garchomp in the semifinals.
+          </p>
+          <div class="stat-group">
+            <div class="stat-label"><span>Aura Power</span><span>96%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 96%;"></div></div>
+            <div class="stat-label"><span>Speed</span><span>92%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 92%;"></div></div>
+          </div>
+        </div>
+        <button class="move-btn" onclick="useMove('Mega Lucario', 'Giant Aura Sphere 🔵')">🥊 Use Signature Move</button>
+      </article>
+
+      <!-- 3. GENGAR -->
+      <article class="poke-card" data-types="ghost poison">
+        <div>
+          <span class="poke-number">#094</span>
+          <div class="poke-img-box">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png" alt="Gengar">
+          </div>
+          <h2 class="poke-name">Gigantamax Gengar</h2>
+          <div class="type-row">
+            <span class="type-pill type-ghost">Ghost</span>
+            <span class="type-pill type-poison">Poison</span>
+          </div>
+          <p class="poke-desc">
+            Once abandoned by its former trainer, Gengar found a true home with Ash and mastered Gigantamaxing in Galar.
+          </p>
+          <div class="stat-group">
+            <div class="stat-label"><span>Special Attack</span><span>95%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 95%;"></div></div>
+            <div class="stat-label"><span>Tricky Speed</span><span>89%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 89%;"></div></div>
+          </div>
+        </div>
+        <button class="move-btn" onclick="useMove('Gigantamax Gengar', 'G-Max Terror 👻')">👻 Use Signature Move</button>
+      </article>
+
+      <!-- 4. DRAGONITE -->
+      <article class="poke-card" data-types="dragon flying">
+        <div>
+          <span class="poke-number">#149</span>
+          <div class="poke-img-box">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/149.png" alt="Dragonite">
+          </div>
+          <h2 class="poke-name">Dragonite</h2>
+          <div class="type-row">
+            <span class="type-pill type-dragon">Dragon</span>
+            <span class="type-pill type-flying">Flying</span>
+          </div>
+          <p class="poke-desc">
+            A warm-hearted powerhouse known for hugging friends before unleashing devastating Draco Meteors in tournament battles.
+          </p>
+          <div class="stat-group">
+            <div class="stat-label"><span>Attack Power</span><span>94%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 94%;"></div></div>
+            <div class="stat-label"><span>Defense</span><span>90%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 90%;"></div></div>
+          </div>
+        </div>
+        <button class="move-btn" onclick="useMove('Dragonite', 'Dragonite Meteor Rush ☄️')">🐉 Use Signature Move</button>
+      </article>
+
+      <!-- 5. SIRFETCH'D -->
+      <article class="poke-card" data-types="fighting">
+        <div>
+          <span class="poke-number">#865</span>
+          <div class="poke-img-box">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/865.png" alt="Sirfetch'd">
+          </div>
+          <h2 class="poke-name">Sirfetch'd</h2>
+          <div class="type-row">
+            <span class="type-pill type-fighting">Fighting</span>
+          </div>
+          <p class="poke-desc">
+            A chivalrous Galarian knight that wields a sharp leek lance and shield, standing tall even against Champion-level aces.
+          </p>
+          <div class="stat-group">
+            <div class="stat-label"><span>Critical Strike</span><span>93%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 93%;"></div></div>
+            <div class="stat-label"><span>Shield Defense</span><span>88%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 88%;"></div></div>
+          </div>
+        </div>
+        <button class="move-btn" onclick="useMove('Sirfetch\'d', 'Meteor Assault 🛡️')">⚔️ Use Signature Move</button>
+      </article>
+
+      <!-- 6. DRACOVISH -->
+      <article class="poke-card" data-types="water dragon">
+        <div>
+          <span class="poke-number">#882</span>
+          <div class="poke-img-box">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/882.png" alt="Dracovish">
+          </div>
+          <h2 class="poke-name">Dracovish</h2>
+          <div class="type-row">
+            <span class="type-pill type-water">Water</span>
+            <span class="type-pill type-dragon">Dragon</span>
+          </div>
+          <p class="poke-desc">
+            Restored from Galar fossils, Dracovish surprised Iris's Dragonite and Steven's Metagross with unmatched jaw strength.
+          </p>
+          <div class="stat-group">
+            <div class="stat-label"><span>Jaw Bite Force</span><span>97%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 97%;"></div></div>
+            <div class="stat-label"><span>Stamina</span><span>91%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 91%;"></div></div>
+          </div>
+        </div>
+        <button class="move-btn" onclick="useMove('Dracovish', 'Fishious Rend 🌊')">🌊 Use Signature Move</button>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- SHARED FOOTER -->
+  <footer class="footer">
+    <p>Pokémon Fan Website &bull; Designed & Coded by <span>Badiuzzaman (26i3171)</span></p>
+  </footer>
+
+  <!-- BEGINNER-FRIENDLY JAVASCRIPT -->
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById("navLinks").classList.toggle("show-menu");
+    }
+
+    // Filter Pokémon Cards by Type
+    function filterTeam(selectedType, clickedButton) {
+      const cards = document.querySelectorAll(".poke-card");
+      const buttons = document.querySelectorAll(".filter-btn");
+
+      buttons.forEach(btn => btn.classList.remove("active-filter"));
+      clickedButton.classList.add("active-filter");
+
+      cards.forEach(card => {
+        const cardTypes = card.getAttribute("data-types");
+        if (selectedType === "all" || cardTypes.includes(selectedType)) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    // Trigger Signature Move Banner
+    function useMove(pokemonName, moveName) {
+      const banner = document.getElementById("battleBanner");
+      banner.textContent = "🔥 ASH COMMANDS: " + pokemonName + ", use " + moveName + "! It's super effective!";
+      banner.style.transform = "scale(1.03)";
+      setTimeout(() => {
+        banner.style.transform = "scale(1)";
+      }, 250);
+    }
+  </script>
+</body>
+</html>
